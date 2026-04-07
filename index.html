@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Caesar Cipher 🔐</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+
+        .card {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 40px;
+            width: 440px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+
+        h1 { font-size: 28px; margin-bottom: 8px; }
+        p.sub { color: #888; margin-bottom: 28px; font-size: 14px; }
+
+        label {
+            display: block;
+            text-align: left;
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 5px;
+            margin-top: 16px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px 14px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #0f3460;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus, select:focus { border-color: #e94560; }
+
+        button {
+            margin-top: 24px;
+            width: 100%;
+            padding: 13px;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover { background: #c73652; }
+
+        #output {
+            margin-top: 24px;
+            padding: 16px;
+            background: #0f3460;
+            border-radius: 10px;
+            font-size: 18px;
+            min-height: 54px;
+            word-break: break-all;
+            display: none;
+        }
+
+        #output.show { display: block; }
+        #output.error { color: #e94560; }
+        #output.success { color: #4ecca3; }
+
+        .summary {
+            margin-top: 28px;
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 16px 18px;
+            text-align: left;
+            font-size: 13.5px;
+            color: #bbb;
+            line-height: 1.7;
+            border-left: 3px solid #e94560;
+        }
+
+        .summary h3 {
+            color: #e94560;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid #1e2d50;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .footer .author {
+            font-size: 15px;
+            color: #eee;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .links a {
+            text-decoration: none;
+            padding: 7px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .links a:hover { opacity: 0.8; }
+        .btn-github { background: #333; color: #fff; }
+        .btn-linkedin { background: #0077b5; color: #fff; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Caesar Cipher 🔐</h1>
+    <p class="sub">Encode or decode your message instantly</p>
+
+    <label>Your Message</label>
+    <input id="text" type="text" placeholder="Enter your message...">
+
+    <label>Shift Value</label>
+    <input id="shift" type="number" placeholder="e.g. 3 or 100 or any number">
+
+    <label>Mode</label>
+    <select id="mode">
+        <option value="encode">🔒 Encode</option>
+        <option value="decode">🔓 Decode</option>
+    </select>
+
+    <button onclick="runCipher()">Run ▶</button>
+
+    <div id="output"></div>
+
+    <!-- Project Summary -->
+    <div class="summary">
+        <h3>📄 About This Project</h3>
+        I built a Caesar Cipher program using Python that can encode and decode messages by shifting letters based on a number given by the user. The program takes a message as input and moves each letter forward or backward in the alphabet depending on whether the user wants to encode or decode.
+        <br><br>
+        I made sure that spaces, symbols, and numbers stay the same so the message remains readable. The program runs in a loop, so the user can try multiple messages without restarting it.
+        <br><br>
+        Through this project, I learned how to use loops, conditions, functions, and string handling in Python, and also improved my problem-solving skills by handling different edge cases like symbols and large shift values.
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="author">👨‍💻 Project made by Kartike Raj Choudhary</div>
+        <div class="links">
+            <a class="btn-github" href="https://github.com/Caesar_cipher_project.py" target="_blank">⌨️ GitHub Code</a>
+            <a class="btn-linkedin" href="https://www.linkedin.com/in/kartike-raj-choudhary/" target="_blank">🔗 LinkedIn</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function caesar(text, shift, mode) {
+        let result = "";
+        for (let char of text) {
+            if (/[a-zA-Z]/.test(char)) {
+                const base = char === char.toLowerCase() ? 97 : 65;
+                const shiftAmount = mode === "encode" ? shift : -shift;
+                const newChar = String.fromCharCode(((char.charCodeAt(0) - base + shiftAmount) % 26 + 26) % 26 + base);
+                result += newChar;
+            } else {
+                result += char;
+            }
+        }
+        return result;
+    }
+
+    function runCipher() {
+        const output = document.getElementById("output");
+        const text = document.getElementById("text").value;
+        const shiftVal = document.getElementById("shift").value;
+        const mode = document.getElementById("mode").value;
+
+        output.className = "show";
+
+        if (!text || !shiftVal) {
+            output.className = "show error";
+            output.innerText = "⚠️ Please fill in all fields!";
+            return;
+        }
+
+        const shift = parseInt(shiftVal);
+        if (isNaN(shift)) {
+            output.className = "show error";
+            output.innerText = "⚠️ Please enter a valid shift number!";
+            return;
+        }
+
+        const result = caesar(text, shift, mode);
+        output.className = "show success";
+        output.innerText = "✅ " + result;
+    }
+
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") runCipher();
+    });
+</script>
+
+</body>
+</html>
